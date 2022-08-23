@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+# Validate environment inputs
+if [ -z "$SCHEME" ]
+then
+    echo "SCHEME must be set"
+    exit 1
+fi
+
+OUTPUTDIR=${OUTPUTDIR:-xcframework}
+FRAMEWORK=${FRAMEWORK:-$SCHEME}
+if ! [ -z "$PROJDIR" ]
+then
+  PROJDIR="$PROJDIR/"
+fi
+
+# Validate that PROJDIR directory has an xcodeproj or xcworkspace
+xcodeproj=$(ls -d $PROJDIR*.xcodeproj 2>/dev/null || true)
+xcworkspace=$(ls -d $PROJDIR*.xcworkspace 2>/dev/null || true)
+if [ -z "$xcodeproj$xcworkspace" ]
+then
+    echo "one of xcodeproj or xcworkspace not found in ${PROJDIR:-"current directory"}."
+    exit 1
+fi
+
+# prefer xcworkspace if available, otherwise use xcodeproj
+project_flag="-project $xcodeproj"
+if ! [ -z "$xcworkspace" ]
+then
+    project_flag="-workspace $xcworkspace"
+fi
+
+# Setup all working directories
+workdir=$(pwd)/${WORKDIR:-.build}
+scheme_root="$workdir/$SCHEME"
+build_root="$scheme_root/build"
+archive_root="$scheme_root/archive"
+output_root="$(pwd)/$OUTPUTDIR"
+
+# Clean working directories
+rm -rf $scheme_root
+mkdir -p $scheme_root
+mkdir -p $build_root
+mkdir -p $archive_root
+mkdir -p $output_root
+
+# Set framework outputs
+framework_name="$FRAMEWORK.framework"
+xcframework_name="$FRAMEWORK.xcframework"
+xcframework_output=$output_root/$xcframework_name
+
+# Final xcodebuild -create-xcarchive args. This gets updated during build.
+xcodebuild_args=""
+
+# Archives the target passed-in to the script
+function archive () {
+    local sdk=$1
+    local configuration=$2
+    local build_path="$build_root/$sdk"
+    local xcarchive_path="$archive_root/$SCHEME-$sdk.xcarchive"
+
+    xcodebuild \
+        $project_flag \
+        -scheme "$SCHEME" \
+        -configuration $configuration \
+        -archivePath $xcarchive_path \
+        -derivedDataPath $build_path \
+        -sdk $sdk \
+        -scmProvider system \
+        -showBuildTimingSummary \
+        archive | xcpretty
+
+    xcodebuild_args="$xcodebuild_args
+        -archive $xcarchive_path
+        -framework $framework_name
+        -debug-symbols $xcarchive_path/dSYMs"
+}
+
+archive "iphonesimulator" "Debug"
+archive "iphoneos" "Release"
+
+# Remove the FRAMEWORK.xcframework bundle if it exists.
+rm -rf $xcframework_output
+
+# Create the xcframework and output to FRAMEWORK.xcframework
+xcodebuild \
+    -create-xcframework \
+    $xcodebuild_args \
+    -output $xcframework_output | xcpretty
+
+# Remove and re-create the zip file
+rm -rf $xcframework_output.zip
+zip_name=$xcframework_name.zip
+(cd $output_root && zip -r9 $zip_name $xcframework_name)
+if [ -z "$UNZIP_XCF" ]
+then
+  # Since unzip_xcframework wasnt specified, assume unzipped copy isnt desired.
+  # Remove the FRAMEWORK.xcframework bundle (zip file contains this bundle now)
+  rm -rf $xcframework_output
+fi
+
+# Set Github Actions outputs
+zip_path=$output_root/$zip_name
+checksum=$(swift package compute-checksum $zip_path)
+echo "::set-output name=zip_name::$zip_name"
+echo "::set-output name=zip_path::$zip_path"
+echo "::set-output name=zip_checksum::$checksum"
