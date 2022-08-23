@@ -1,15 +1,15 @@
-// swift-tools-version: 5.6
+// swift-tools-version: 5.5
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
-    name: "StaticLibDemo",
+    name: "StaticLib",
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "StaticLibDemo",
-            targets: ["StaticLibDemo"]),
+            name: "StaticLib",
+            targets: ["StaticLib"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -18,11 +18,10 @@ let package = Package(
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
-        .target(
-            name: "StaticLibDemo",
-            dependencies: []),
-        .testTarget(
-            name: "StaticLibDemoTests",
-            dependencies: ["StaticLibDemo"]),
+        // (I'm providing path to non-zip here bcus I dont want to deploy to a URL for a demo and bcus Xcode 13.1,
+        //  which I need compatibility with, doesnt support zip files in the path initializer.)
+        .binaryTarget(
+            name: "StaticLib",
+            path: "xcframework/StaticLib.xcframework"),
     ]
 )
