@@ -26,7 +26,7 @@ let package = Package(
         .target(
             name: "StaticLibResBundle",
             dependencies: [],
-            path: "Resources/ResourceMockSource.swift", // required to make spm happy
+            path: "Resources", // required to make spm happy
             resources: [
                 .process("Resources/sample.json"),
             ]
