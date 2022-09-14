@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		327B256228D289C50080AB17 /* sample.json in Resources */ = {isa = PBXBuildFile; fileRef = 32FEF9EA28B58E3900E28BBB /* sample.json */; };
+		327B256428D291CD0080AB17 /* ResourceMockSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327B256328D291CD0080AB17 /* ResourceMockSource.swift */; };
 		32FEF9E228B58B5300E28BBB /* StaticLib.h in Headers */ = {isa = PBXBuildFile; fileRef = 32FEF9E128B58B5300E28BBB /* StaticLib.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		32FEF9EF28B58E3900E28BBB /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 32FEF9E828B58E3900E28BBB /* README.md */; };
 		32FEF9F028B58E3900E28BBB /* sample.json in Resources */ = {isa = PBXBuildFile; fileRef = 32FEF9EA28B58E3900E28BBB /* sample.json */; };
@@ -30,6 +31,7 @@
 
 /* Begin PBXFileReference section */
 		327B255E28D2881F0080AB17 /* StaticLibResBundle.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StaticLibResBundle.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		327B256328D291CD0080AB17 /* ResourceMockSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceMockSource.swift; sourceTree = "<group>"; };
 		32FEF9DE28B58B5300E28BBB /* StaticLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StaticLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		32FEF9E128B58B5300E28BBB /* StaticLib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StaticLib.h; sourceTree = "<group>"; };
 		32FEF9E828B58E3900E28BBB /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				32FEF9EA28B58E3900E28BBB /* sample.json */,
+				327B256328D291CD0080AB17 /* ResourceMockSource.swift */,
 			);
 			name = Resources;
 			path = ../Resources;
@@ -219,6 +222,7 @@
 				TargetAttributes = {
 					327B255D28D2881F0080AB17 = {
 						CreatedOnToolsVersion = 13.1;
+						LastSwiftMigration = 1310;
 					};
 					32FEF9DD28B58B5300E28BBB = {
 						CreatedOnToolsVersion = 13.1;
@@ -281,6 +285,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				327B256428D291CD0080AB17 /* ResourceMockSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,6 +321,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -325,6 +331,11 @@
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSPrincipalClass = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.liam.demo.StaticLibResBundle;
@@ -332,6 +343,8 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
@@ -340,6 +353,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -349,6 +363,11 @@
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSPrincipalClass = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.liam.demo.StaticLibResBundle;
@@ -356,6 +375,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
