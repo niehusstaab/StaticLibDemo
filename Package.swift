@@ -28,7 +28,7 @@ let package = Package(
             dependencies: [],
             path: "Resources", // required to make spm happy
             resources: [
-                .process("Resources/sample.json"),
+                .process("Resources"),
             ]
         ),
     ]
