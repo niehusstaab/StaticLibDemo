@@ -9,7 +9,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "StaticLib",
-            targets: ["StaticLib"]),
+            targets: ["StaticLib", "StaticLibResBundle"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -23,5 +23,12 @@ let package = Package(
         .binaryTarget(
             name: "StaticLib",
             path: "xcframework/StaticLib.xcframework"),
+        .target(
+            name: "StaticLibResBundle",
+            dependencies: [],
+            resources: [
+                .process("Resources/sample.json"),
+            ]
+        ),
     ]
 )

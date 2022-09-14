@@ -3,6 +3,7 @@ public struct StaticLibDemo {
 
     /// Read data from the sample.json resource which SHOULD be included in this package
     public func getResource() -> [String: String?] {
+        print("bundle data: \(Bundle.module.bundleIdentifier)")
         let url = Bundle.module.url(forResource: "sample", withExtension: "json")!
         let data = try! Data(contentsOf: url, options: .mappedIfSafe)
         let decoded = try! JSONDecoder().decode([String: String].self, from: data)
